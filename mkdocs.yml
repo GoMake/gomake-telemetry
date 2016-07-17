@@ -1,0 +1,14 @@
+site_name: telemetry
+site_description: goMake Telemetry System
+site_author: ls
+repo_url: https://github.com/jonathanbarton/gomake-telemetry
+# google_analytics: ['XX-XXXXXXXX-XX', 'auto']
+
+theme: mkdocs
+
+pages:
+- Home: index.md
+- About:
+  - 'Release Notes': about/changelog.md
+  - Contributing: about/contributing.md
+  - License: about/license.md
