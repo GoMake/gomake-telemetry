@@ -1,7 +1,7 @@
 """A sample module."""
 
 
-class Class(object):
+class Main(object):
     """A sample class."""
 
 
@@ -23,3 +23,6 @@ def function_with_network_stuff():
 def function_with_disk_stuff():
     """A sample function that might take a long time to test."""
     return False
+
+if __name__ == '__main__':
+	pass
