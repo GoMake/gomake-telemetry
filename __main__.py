@@ -6,7 +6,7 @@ gpsPath = os.environ.get('GPS_PATH')
 gpsBaud = os.environ.get('GPS_BAUD')
 satPath = os.environ.get('SAT_PATH')
 satBaud = os.environ.get('SAT_BAUD')
-tempSensorPin = ''
+tempSensorPin = 0
 gasSensorPin = ''
 soundSensorPin = ''
 pushButtonPin = ''
@@ -36,9 +36,7 @@ class Main():
     def run(self):
         try:
             while True:
-                #Get Timestamp
                 timestamp = self.getCurrentTime()
-                #Read GPS value
                 coordinates = self.gps.read()
                 #Read Sensor values
                 sensorValues = {}
@@ -47,7 +45,6 @@ class Main():
                     sensorValue = sensor.read()
                     sensorValues[sensorType] = sensorValue
                 #Send Satellite Message
-
                 time.sleep(2)
         except Exception as e:
             logging.exception(e)
