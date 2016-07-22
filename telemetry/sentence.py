@@ -42,5 +42,7 @@ class Sentence():
 		self.satellites = data[7] or 0
 		self.dilution = data[8] or 0
 		self.altitude = data[9] or 0
+        def isValid(self):
+                return True
 	def checkCRC(self, data):
 		pass

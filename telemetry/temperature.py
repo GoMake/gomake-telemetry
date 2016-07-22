@@ -6,15 +6,27 @@ class Temperature(Sensor):
 	name = 'Temperature'
 	def __init__(self, pin, logger=None):
 		Sensor.__init__(self, self.name, logger)
+		self.pin = pin
 		self.connect()
 	def connect(self):
-		grovepi.pinMode(pin, "INPUT")
+		if(not isinstance(self.pin, int)):
+			self.validPin = False
+		else:
+			self.validPin = True
+		grovepi.pinMode(self.pin, "INPUT")
 	def read(self):
+		if(not self.validPin):
+			self.logError('No valid pin provided')
+			return 0
 		try:	
-			analogValue = grovepi.analogRead(0)
+			analogValue = grovepi.analogRead(self.pin)
 			temperature = (5.0 * analogValue * 100.0) / 1024
+			return temperature
 		except (IOError, TypeError) as e:
-		print("Error")			
+		    self.logError('Could not read value from sensor')	
+		return 0	
 
 if __name__ == '__main__':
-	t = Temperature()
+	t = Temperature(0)
+	temp = t.read()
+	print str(temp)

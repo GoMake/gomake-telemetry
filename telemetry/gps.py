@@ -63,5 +63,7 @@ class GPS(Sensor):
         fixDataArray = line.split(',')
         return Sentence(fixDataArray)
 if __name__ == "__main__":
-    gps=GPS('/dev/tty', 4800)
+    gps=GPS('/dev/ttyS0', 4800)
     coords = gps.read()
+    print coords
+    print coords.latitude
