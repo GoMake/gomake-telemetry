@@ -1,13 +1,18 @@
 import sys, os, time, logging
+from telemetry import gps
+from telemetry import temperature
+from telemetry import sound
+from telemetry import gas
 
 dbPath = os.environ.get('DB_PATH') or 'data.db'
 logPath = os.environ.get('LOG_PATH') or 'event.log'
-gpsPath = os.environ.get('GPS_PATH')
-gpsBaud = os.environ.get('GPS_BAUD')
+gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
+gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH')
 satBaud = os.environ.get('SAT_BAUD')
 tempSensorPin = 0
-gasSensorPin = ''
+soundSensorPin = 1
+gasSensorPin = 2
 soundSensorPin = ''
 pushButtonPin = ''
 lcdPin = ''
@@ -19,8 +24,20 @@ class Main():
         self.logMessage("Loading: Satellite Modem...")
     def getGPS(self):
         self.logMessage("Loading: GPS Module...")
+        return gps.GPS(gpsPath, gpsBaud, self.logger)
     def getSensors(self):
         self.logMessage("Loading: GrovePi Sensor Configuration...")
+        sensors = []
+        self.logMessage("Loading: LM35 Temperature Sensor...")
+        temperature = temperature.Temperature(tempSensorPin, self.logger)
+        sensors.append(temperature)
+        self.logMessage("Loading: Sound Sensor...")
+        sound = sound.Sound(soundSensorPin, self.logger)
+        sensors.append(sound)
+        self.logMessage("Loading: Gas Sensor...")
+        gas = gas.Gas(gasSensorPin, self.logger)
+        sensors.append(gas)
+        return sensors
     def loadModules(self):
         self.database = self.getDatabase()
         self.satModem = self.getSatModem()
@@ -28,12 +45,14 @@ class Main():
         self.sensorList = self.getSensors()
     def getCurrentTime(self):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-    def logMessage(message):
+    def logMessage(self, message):
         if(self.logger and message):
-            self.logger.info(message)
-    def setupLogging():
-        self.logger = logging.basicConfig(filename=logPath, format='%(asctime)s - %(name)s:: %(message)s', level=logging.INFO)
+            logging.info(message)
+    def setupLogging(self):
+        logging.basicConfig(filename=logPath, format='%(asctime)s - gomake:: %(message)s', level=logging.INFO)
+        self.logger = logging.getLogger()
     def run(self):
+        self.logMessage('Beginning run loop...')
         try:
             while True:
                 timestamp = self.getCurrentTime()
@@ -44,8 +63,10 @@ class Main():
                     sensorType = sensor.getType()
                     sensorValue = sensor.read()
                     sensorValues[sensorType] = sensorValue
+                    time.sleep(1)
+                #Log in log
+                #Record in Database
                 #Send Satellite Message
-                time.sleep(2)
         except Exception as e:
             logging.exception(e)
             sys.exit(0)

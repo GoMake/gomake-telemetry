@@ -1,3 +1,5 @@
+import logging
+
 class Sensor(object):
 	sensorType = '__undefinedsensor__'
 	def __init__(self, type, logger=None):
@@ -9,7 +11,7 @@ class Sensor(object):
 		return self.sensorType
 	def logMessage(self, message):
 		if(self.logger and message):
-			self.logger.info(self.sensorType + ' Sensor::' + message)
+			logging.info(self.sensorType + ' Sensor::' + message)
 	def logError(self, message):
 		if(self.logger and message):
-			self.logger.error(self.sensorType + ' Sensor::' + message)
+			logging.error(self.sensorType + ' Sensor::' + message)

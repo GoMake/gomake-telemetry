@@ -3,6 +3,7 @@ import serial
 import signal
 import sys
 import time
+import logging
 from sensor import Sensor
 from sentence import Sentence
 

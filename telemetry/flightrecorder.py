@@ -1,6 +1,7 @@
 import logging
 import sqlite3 as sqlite
 import os, sys
+import sentence
 
 class Database():
 	def __init__(self, dbPath, logger=None):
@@ -11,3 +12,7 @@ class Database():
 		finally:
 			if self.conn:
 				self.conn.close()
+	def setupTables(self):
+		pass
+	def saveSentence(self):
+		pass

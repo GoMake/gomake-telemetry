@@ -1,0 +1,69 @@
+2016-07-22 22:19:32,490 - root:: 'NoneType' object has no attribute 'read'
+Traceback (most recent call last):
+  File "/projects/gomake-telemetry/__main__.py", line 42, in run
+    coordinates = self.gps.read()
+AttributeError: 'NoneType' object has no attribute 'read'
+2016-07-22 22:20:39,545 - root:: 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "/projects/gomake-telemetry/__main__.py", line 45, in run
+    for sensor in self.sensorList:
+TypeError: 'NoneType' object is not iterable
+2016-07-22 22:29:00,033 - root:: got heeere
+2016-07-22 22:29:44,984 - root:: Loading: GPS Module...
+2016-07-22 22:32:01,505 - root:: Loading: SQLite Database...
+2016-07-22 22:32:01,505 - root:: Loading: Satellite Modem...
+2016-07-22 22:32:01,505 - root:: Loading: GPS Module...
+2016-07-22 22:32:01,505 - root:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:32:01,505 - root:: Loading: GrovePi Sensor Configuration...
+2016-07-22 22:32:31,890 - gomake:: Loading: SQLite Database...
+2016-07-22 22:32:31,890 - gomake:: Loading: Satellite Modem...
+2016-07-22 22:32:31,890 - gomake:: Loading: GPS Module...
+2016-07-22 22:32:31,890 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:32:31,890 - gomake:: Loading: GrovePi Sensor Configuration...
+2016-07-22 22:34:32,059 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:34:43,953 - gomake:: Loading: SQLite Database...
+2016-07-22 22:34:43,953 - gomake:: Loading: Satellite Modem...
+2016-07-22 22:34:43,953 - gomake:: Loading: GPS Module...
+2016-07-22 22:34:43,954 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:34:43,954 - gomake:: Loading: GrovePi Sensor Configuration...
+2016-07-22 22:34:43,954 - gomake:: Beginning run loop...
+2016-07-22 22:36:44,131 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:38:44,314 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:40:44,488 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:42:44,671 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:44:44,846 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:46:45,019 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:48:45,176 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:50:45,348 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:52:45,518 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:54:45,689 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:56:45,869 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 22:58:46,037 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:00:46,215 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:02:46,380 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:04:46,533 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:06:46,698 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:08:46,872 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:10:47,041 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:12:47,227 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:14:47,429 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:16:47,594 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:18:47,753 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:20:47,929 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:22:48,100 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:24:48,271 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:26:48,450 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:28:48,622 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:30:48,800 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:32:48,976 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:34:49,139 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:36:49,322 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:38:49,510 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:40:49,698 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:42:49,875 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:44:50,054 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:46:50,235 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:48:50,425 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:50:50,618 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:52:50,784 - gomake:: GPS Sensor::Failed to open serial port for GPS
+2016-07-22 23:54:50,960 - gomake:: GPS Sensor::Failed to open serial port for GPS
