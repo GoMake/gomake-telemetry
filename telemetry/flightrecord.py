@@ -16,7 +16,7 @@ class FlightRecord():
 		flightRecord['long'] = self.coordinates.longitude or ''
 		flightRecord['alt'] = self.coordinates.altitude or ''
 		flightRecord['sensors'] = json.dumps(self.sensorValues)
-
+		return flightRecord
 	def getLogFormat(self):
 		logStringArray = []
 		logStringArray.append(str(self.coordinates.latitude))
