@@ -8,8 +8,8 @@ from telemetry import flightrecorder
 from telemetry import flightrecord
 from telemetry import lcd
 
-dbPath = os.environ.get('DB_PATH') or 'data.db'
-logPath = os.environ.get('LOG_PATH') or 'event.log'
+dbPath = os.environ.get('DB_PATH') or '/opt/telemetry-data/data.db'
+logPath = os.environ.get('LOG_PATH') or '/opt/telemetry-data/event.log'
 gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
 gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH')
@@ -39,9 +39,9 @@ class Main():
         self.logMessage("Loading: LM35 Temperature Sensor...")
         tempSensor = temperature.Temperature(tempSensorPin, self.logger)
         sensors.append(tempSensor)
-        #self.logMessage("Loading: Sound Sensor...")
-        #soundSensor = sound.Sound(soundSensorPin, self.logger)
-        #sensors.append(soundSensor)
+        self.logMessage("Loading: Sound Sensor...")
+        soundSensor = sound.Sound(soundSensorPin, self.logger)
+        sensors.append(soundSensor)
         #self.logMessage("Loading: Gas Sensor...")
         #gasSensor = gas.Gas(gasSensorPin, self.logger)
         #sensors.append(gasSensor)
