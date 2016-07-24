@@ -53,8 +53,8 @@ class Main():
         self.logger = logging.getLogger()
     def run(self):
         self.logMessage('Beginning run loop...')
-        try:
-            while True:
+        while True:
+            try:
                 timestamp = self.getCurrentTime()
                 coordinates = self.gps.read()
                 #Read Sensor values
@@ -67,9 +67,8 @@ class Main():
                 #Log in log
                 #Record in Database
                 #Send Satellite Message
-        except Exception as e:
-            logging.exception(e)
-            sys.exit(0)
+            except Exception as e:
+                logging.exception(e)
     def __init__(self):
         self.setupLogging()
         self.loadModules()
