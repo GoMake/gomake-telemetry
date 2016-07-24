@@ -50,3 +50,6 @@ Icon*
 
 # IDEAJ
 .idea
+
+#gomake-telemetry
+event.log

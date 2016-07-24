@@ -29,14 +29,14 @@ class Main():
         self.logMessage("Loading: GrovePi Sensor Configuration...")
         sensors = []
         self.logMessage("Loading: LM35 Temperature Sensor...")
-        temperature = temperature.Temperature(tempSensorPin, self.logger)
-        sensors.append(temperature)
-        self.logMessage("Loading: Sound Sensor...")
-        sound = sound.Sound(soundSensorPin, self.logger)
-        sensors.append(sound)
-        self.logMessage("Loading: Gas Sensor...")
-        gas = gas.Gas(gasSensorPin, self.logger)
-        sensors.append(gas)
+        tempSensor = temperature.Temperature(tempSensorPin, self.logger)
+        sensors.append(tempSensor)
+        #self.logMessage("Loading: Sound Sensor...")
+        #soundSensor = sound.Sound(soundSensorPin, self.logger)
+        #sensors.append(soundSensor)
+        #self.logMessage("Loading: Gas Sensor...")
+        #gasSensor = gas.Gas(gasSensorPin, self.logger)
+        #sensors.append(gasSensor)
         return sensors
     def loadModules(self):
         self.database = self.getDatabase()
