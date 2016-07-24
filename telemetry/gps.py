@@ -25,7 +25,7 @@ class GPS(Sensor):
         try:
             self.conn = serial.Serial(self.serialPath,  self.serialBaud)
             self.numberOfReadTries = 0
-        except OSError:
+        except (serial.serialutil.SerialException, OSError) as e:
             self.logMessage('Failed to open serial port for GPS')
     def tryReconnect(self):
         currentTime = int(time.time())

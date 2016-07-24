@@ -23,10 +23,10 @@ pushButtonPin = 3
 class Main():
     def getLCD(self):
         self.logMessage("Loading: LCD Screen...")
-        return telemetry.LCD()
+        return lcd.LCD()
     def getDatabase(self):
         self.logMessage("Loading: SQLite Database...")
-        return flightrecorder.Database()
+        return flightrecorder.Database(dbPath)
     def getSatModem(self):
         self.logMessage("Loading: Satellite Modem...")
     def getGPS(self):
@@ -88,7 +88,7 @@ class Main():
                 coordinates = self.gps.read()
                 #Read Sensor values
                 sensorValues = self.readSensorValues()
-                record = FlightRecord(timestamp, coordinates, sensorValues)
+                record = flightrecord.FlightRecord(timestamp, coordinates, sensorValues)
                 #Log in log
                 self.logMessage(record.getLogFormat())
                 if(self.isDataLoggingEnabled()):
