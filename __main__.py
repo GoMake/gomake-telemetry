@@ -3,6 +3,10 @@ from telemetry import gps
 from telemetry import temperature
 from telemetry import sound
 from telemetry import gas
+from telemetry import button
+from telemetry import flightrecorder
+from telemetry import flightrecord
+from telemetry import lcd
 
 dbPath = os.environ.get('DB_PATH') or 'data.db'
 logPath = os.environ.get('LOG_PATH') or 'event.log'
@@ -14,12 +18,15 @@ tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
 soundSensorPin = ''
-pushButtonPin = ''
-lcdPin = ''
+pushButtonPin = 3
 
 class Main():
+    def getLCD(self):
+        self.logMessage("Loading: LCD Screen...")
+        return telemetry.LCD()
     def getDatabase(self):
         self.logMessage("Loading: SQLite Database...")
+        return flightrecorder.Database()
     def getSatModem(self):
         self.logMessage("Loading: Satellite Modem...")
     def getGPS(self):
@@ -38,11 +45,15 @@ class Main():
         #gasSensor = gas.Gas(gasSensorPin, self.logger)
         #sensors.append(gasSensor)
         return sensors
+    def getButton(self):
+        return button.Button(pushButtonPin, self.logger)
     def loadModules(self):
         self.database = self.getDatabase()
         self.satModem = self.getSatModem()
         self.gps = self.getGPS()
         self.sensorList = self.getSensors()
+        self.dataLoggingButton = self.getButton()
+        self.lcd = self.getLCD()
     def getCurrentTime(self):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     def logMessage(self, message):
@@ -51,22 +62,39 @@ class Main():
     def setupLogging(self):
         logging.basicConfig(filename=logPath, format='%(asctime)s - gomake:: %(message)s', level=logging.INFO)
         self.logger = logging.getLogger()
+    def isDataLoggingEnabled(self):
+        if(not self.dataLoggingEnabled):
+            if(self.dataLoggingButton.read() == '1'):
+                self.dataLoggingEnabled = True
+        return self.dataLoggingEnabled or None
+    def readSensorValues(self):
+        sensorValues = {}
+        for sensor in self.sensorList:
+            sensorType = sensor.getType()
+            sensorValue = sensor.read()
+            sensorValues[sensorType] = sensorValue
+            time.sleep(0.5)
+        return sensorValues
+    def setLCDStatus(self):
+        statusString = 'TESTING 1234'
+        if(self.lcd):
+            self.lcd.setStatus(statusString)
     def run(self):
         self.logMessage('Beginning run loop...')
+        self.setLCDStatus()
         while True:
             try:
                 timestamp = self.getCurrentTime()
                 coordinates = self.gps.read()
                 #Read Sensor values
-                sensorValues = {}
-                for sensor in self.sensorList:
-                    sensorType = sensor.getType()
-                    sensorValue = sensor.read()
-                    sensorValues[sensorType] = sensorValue
-                    time.sleep(1)
+                sensorValues = self.readSensorValues()
+                record = FlightRecord(timestamp, coordinates, sensorValues)
                 #Log in log
-                #Record in Database
-                #Send Satellite Message
+                self.logMessage(record.getLogFormat())
+                if(self.isDataLoggingEnabled()):
+                    #Record in Database
+                    self.database.saveFlightRecord(record.getDatabaseFormat())
+                    #Send Satellite Message
             except Exception as e:
                 logging.exception(e)
     def __init__(self):

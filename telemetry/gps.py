@@ -12,9 +12,9 @@ class GPS(Sensor):
     conn = None
     lastTryTime = None
     numberOfReadTries = 0
-    maxNumberOfReadTries = 5
+    maxNumberOfReadTries = 3
     secondsToWaitForReconnect = 120
-    secondsToWaitForRead = 5
+    secondsToWaitForRead = 2
     def __init__(self, serialPath, serialBaud, logger=None):
         Sensor.__init__(self, self.name, logger)
         self.serialPath = serialPath
