@@ -15,14 +15,14 @@ class FlightRecord():
 		flightRecord['lat'] = self.coordinates.latitude or ''
 		flightRecord['long'] = self.coordinates.longitude or ''
 		flightRecord['alt'] = self.coordinates.altitude or ''
-		flightRecord['sensors'] = json.dumps(self.sensorValues) or '{}'
+		flightRecord['sensors'] = json.dumps(self.sensorValues)
 
 	def getLogFormat(self):
 		logStringArray = []
-		logStringArray.append(self.coordinates.latitude)
-		logStringArray.append(self.coordinates.longitude)
-		logStringArray.append(self.coordinates.altitude)
-		logStringArray.append(json.dumps(self.sensorValues) or '{}')
+		logStringArray.append(str(self.coordinates.latitude))
+		logStringArray.append(str(self.coordinates.longitude))
+		logStringArray.append(str(self.coordinates.altitude))
+		logStringArray.append(json.dumps(self.sensorValues))
 		return ','.join(logStringArray)
 		
 	def getSatModemFormat(self):

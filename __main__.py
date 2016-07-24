@@ -61,7 +61,7 @@ class Main():
         if(self.logger and message):
             logging.info(message)
     def setupLogging(self):
-        logging.basicConfig(filename=logPath, format='%(asctime)s - gomake:: %(message)s', level=logging.INFO)
+        logging.basicConfig(filename=logPath, format='%(asctime)s gomake:: %(message)s', level=logging.INFO)
         self.logger = logging.getLogger()
     def isDataLoggingEnabled(self):
         if(not self.dataLoggingEnabled):
