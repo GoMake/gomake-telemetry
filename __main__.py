@@ -21,6 +21,7 @@ soundSensorPin = ''
 pushButtonPin = 3
 
 class Main():
+    dataLoggingEnabled = False
     def getLCD(self):
         self.logMessage("Loading: LCD Screen...")
         return lcd.LCD()

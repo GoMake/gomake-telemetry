@@ -32,6 +32,8 @@ class Sentence():
 		self.setFixData(fixDataArray)
 		self.checkCRC(fixDataArray)
 	def setFixData(self, data):
+		if(len(data) == 0):
+			return self.setEmptyData()
 		self.type = data[0] or ''
 		self.timestamp = data[1] or str(int(time.time()))
 		self.latitude = data[2] or 0
@@ -42,7 +44,18 @@ class Sentence():
 		self.satellites = data[7] or 0
 		self.dilution = data[8] or 0
 		self.altitude = data[9] or 0
-        def isValid(self):
-                return True
+		def isValid(self):
+			return True
 	def checkCRC(self, data):
 		pass
+	def setEmptyData(self):
+		self.type = ''
+		self.timestamp = str(int(time.time()))
+		self.latitude = '0'
+		self.latitude_direction = ''
+		self.longitude = '0'
+		self.longitude_direction = ''
+		self.fix_quality = '0'
+		self.satellites = '0'
+		self.dilution = '0'
+		self.altitude = '0'

@@ -41,11 +41,11 @@ class GPS(Sensor):
             line = self.readLine() # '$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47'
             if line[:6] == '$GPGGA':
                 sentence = self.getSentence(line)
-                if(sentence.isValid()):
+                if(sentence and sentence.isValid()):
                     return sentence
             self.numberOfReadTries += 1
             time.sleep(0.1)
-        return None
+        return Sentence([])
     def readLine(self):
         try:
             signal.signal(signal.SIGALRM, self.handleReadError)
@@ -57,7 +57,7 @@ class GPS(Sensor):
         except serial.serialutil.SerialException:
             self.numberOfReadTries += 1
             self.logMessage('Failed to read from serial port')
-        return ''
+        return None
     def handleReadError(self, signum, frame):
         pass
     def getSentence(self, line):
