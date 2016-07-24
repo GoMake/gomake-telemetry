@@ -66,7 +66,8 @@ class Main():
     def isDataLoggingEnabled(self):
         if(not self.dataLoggingEnabled):
             if(self.dataLoggingButton.read() == '1'):
-                self.dataLoggingEnabled = True
+		self.dataLoggingEnabled = True
+		self.setLCDStatus()
         return self.dataLoggingEnabled or None
     def readSensorValues(self):
         sensorValues = {}
@@ -83,7 +84,7 @@ class Main():
             self.lcd.setStatus(statusString)
     def run(self):
         self.logMessage('Beginning run loop...')
-        self.setLCDStatus()
+	self.setLCDStatus()
         while True:
             try:
                 timestamp = self.getCurrentTime()
