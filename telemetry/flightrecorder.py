@@ -8,6 +8,7 @@ class Database():
 	def __init__(self, dbPath, logger=None):
 		self.dbPath = dbPath
 		self.connect()
+		self.setupTables()
 	def connect(self):
 		try:
 			self.conn = sqlite.connect(self.dbPath)
