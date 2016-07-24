@@ -77,7 +77,8 @@ class Main():
             time.sleep(0.5)
         return sensorValues
     def setLCDStatus(self):
-        statusString = 'TESTING 1234'
+        recStatus = 'Y' if self.dataLoggingEnabled else 'N'
+        statusString = 'RUN: Y' + ' REC: ' + recStatus
         if(self.lcd):
             self.lcd.setStatus(statusString)
     def run(self):
@@ -93,6 +94,7 @@ class Main():
                 #Log in log
                 self.logMessage(record.getLogFormat())
                 if(self.isDataLoggingEnabled()):
+                    self.logMessage('Writing to database...')
                     #Record in Database
                     self.database.saveFlightRecord(record.getDatabaseFormat())
                     #Send Satellite Message
