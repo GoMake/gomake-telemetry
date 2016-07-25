@@ -56,6 +56,16 @@ class Main():
         self.sensorList = self.getSensors()
         self.dataLoggingButton = self.getButton()
         self.lcd = self.getLCD()
+        self.getDataLoggingStatus()
+    def getDataLoggingStatus(self):
+        datalogging = self.database.getConfigValueByKeyName('datalogging')
+        if(datalogging == 'True'):
+            self.dataLoggingEnabled == True
+        else:
+            self.dataLoggingEnabled == False
+    def setDataLoggingStatus(self, dataLoggingStatus):
+        self.dataLoggingEnabled = dataLoggingStatus
+        self.database.saveConfigItem({'type':'main','key':'datalogging','value': str(dataLoggingStatus)})
     def getCurrentTime(self):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     def logMessage(self, message):
@@ -66,10 +76,11 @@ class Main():
         self.logger = logging.getLogger()
     def isDataLoggingEnabled(self):
         if(not self.dataLoggingEnabled):
-            if(self.dataLoggingButton.read() == '1'):
-		self.dataLoggingEnabled = True
-		self.setLCDStatus()
-        return self.dataLoggingEnabled or None
+            isButtonPressed = self.dataLoggingButton.read() == '1'
+            if(isButtonPressed):
+                self.setDataLoggingStatus(True)
+                self.setLCDStatus()
+        return self.dataLoggingEnabled
     def readSensorValues(self):
         sensorValues = {}
         for sensor in self.sensorList:
