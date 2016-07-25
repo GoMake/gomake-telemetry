@@ -32,7 +32,8 @@ class Database():
 				cursor = self.conn.cursor()
 				cursor.executescript("""
 					CREATE TABLE IF NOT EXISTS flightdata(id INTEGER PRIMARY KEY, timestamp TEXT, lat TEXT, long TEXT, alt TEXT, sensors TEXT);
-					CREATE TABLE IF NOT EXISTS flightdata(id INTEGER PRIMARY KEY, type TEXT, key TEXT, value TEXT);
+					CREATE TABLE IF NOT EXISTS config(id INTEGER PRIMARY KEY, type TEXT, key TEXT, value TEXT);
+					INSERT INTO config (type, key, value) VALUES ('main','datalogging','False');
 				""")
 				self.conn.commit()
 			except sqlite.Error, e:
@@ -52,9 +53,10 @@ class Database():
 	def saveConfigItem(self, config):
 		try:
 			cursor = self.conn.cursor()
-			placeholders = ':'+', :'.join(record.keys())
-			query = 'INSERT INTO config (type, key, value) VALUES (%s)' % (placeholders)
-			cursor.execute(query, record)
+			query = """
+			UPDATE config SET type='%s', value='%s' WHERE key='%s' % (config.type, config.value, config.key)
+			"""
+			cursor.execute(query)
 			self.conn.commit()
 		except sqlite.Error, e:
 			self.conn.rollback()
@@ -68,6 +70,7 @@ class Database():
 				return configItem[3]
 		except sqlite.Error, e:
 			logging.error('Could not select config item for ' + keyName)
+		return False
 
 if __name__ == "__main__":
 	d = Database('data.db')
