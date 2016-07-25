@@ -97,9 +97,11 @@ class Main():
             self.lcd.setStatus(statusString)
             self.lcd.flashColor()
     def waitForRun(self):
-		while not self.runButtonPressed:
-			if(self.dataLoggingButton.read() == '1'):
-				self.runButtonPressed = True
+		logging.info(str(self.dataLoggingEnabled))
+		if not self.dataLoggingEnabled:
+			while not self.runButtonPressed:
+				if(self.dataLoggingButton.read() == '1'):
+					self.runButtonPressed = True
     def run(self):
         self.logMessage('Beginning run loop...')
 	self.setLCDStatus()

@@ -33,7 +33,8 @@ class Database():
 				cursor.executescript("""
 					CREATE TABLE IF NOT EXISTS flightdata(id INTEGER PRIMARY KEY, timestamp TEXT, lat TEXT, long TEXT, alt TEXT, sensors TEXT);
 					CREATE TABLE IF NOT EXISTS config(id INTEGER PRIMARY KEY, type TEXT, key TEXT, value TEXT);
-					INSERT INTO config (type, key, value) VALUES ('main','datalogging','False');
+					INSERT INTO config (type, key, value) VALUES ('main','datalogging','False')
+					WHERE NOT EXISTS(SELECT * FROM config WHERE key='datalogging');
 				""")
 				self.conn.commit()
 			except sqlite.Error, e:
@@ -54,17 +55,19 @@ class Database():
 		try:
 			cursor = self.conn.cursor()
 			query = """
-			UPDATE config SET type='%s', value='%s' WHERE key='%s' % (config.type, config.value, config.key)
-			"""
+			UPDATE config SET type='%s', value='%s' WHERE key='%s'
+			""" % (config['type'], config['value'], config['key'])
 			cursor.execute(query)
 			self.conn.commit()
 		except sqlite.Error, e:
 			self.conn.rollback()
-			logging.error('Could not insert config item in database: ' + json.dumps(record))
+			logging.error('Could not insert config item in database: ' + json.dumps(config))
 	def getConfigValueByKeyName(self, keyName):
 		try:
 			cursor = self.conn.cursor()
-			cursor.execute('SELECT * FROM config WHERE key=%s' % (keyName))
+			cursor.execute("""
+				SELECT * FROM config WHERE key='%s'
+			""" % (keyName))
 			configItem = cursor.fetchone()
 			if configItem != None:
 				return configItem[3]
