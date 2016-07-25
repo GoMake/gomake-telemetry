@@ -22,6 +22,7 @@ pushButtonPin = 3
 
 class Main():
     dataLoggingEnabled = False
+    runButtonPressed = False
     def getLCD(self):
         self.logMessage("Loading: LCD Screen...")
         return lcd.LCD()
@@ -39,9 +40,9 @@ class Main():
         self.logMessage("Loading: LM35 Temperature Sensor...")
         tempSensor = temperature.Temperature(tempSensorPin, self.logger)
         sensors.append(tempSensor)
-        self.logMessage("Loading: Sound Sensor...")
-        soundSensor = sound.Sound(soundSensorPin, self.logger)
-        sensors.append(soundSensor)
+        #self.logMessage("Loading: Sound Sensor...")
+        #soundSensor = sound.Sound(soundSensorPin, self.logger)
+        #sensors.append(soundSensor)
         #self.logMessage("Loading: Gas Sensor...")
         #gasSensor = gas.Gas(gasSensorPin, self.logger)
         #sensors.append(gasSensor)
@@ -78,10 +79,16 @@ class Main():
             time.sleep(0.5)
         return sensorValues
     def setLCDStatus(self):
+	runStatus = 'Y' if self.runButtonPressed else 'N'
         recStatus = 'Y' if self.dataLoggingEnabled else 'N'
-        statusString = 'RUN: Y' + ' REC: ' + recStatus
+        statusString = 'RUN: ' + runStatus + ' REC: ' + recStatus
         if(self.lcd):
             self.lcd.setStatus(statusString)
+            self.lcd.flashColor()
+    def waitForRun(self):
+		while not self.runButtonPressed:
+			if(self.dataLoggingButton.read() == '1'):
+				self.runButtonPressed = True
     def run(self):
         self.logMessage('Beginning run loop...')
 	self.setLCDStatus()
@@ -107,5 +114,6 @@ class Main():
 
 if __name__ == '__main__':
     telemetry = Main()
+    telemetry.waitForRun()
     telemetry.run()
 
