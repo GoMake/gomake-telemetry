@@ -14,7 +14,7 @@ gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
 gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH')
 satBaud = os.environ.get('SAT_BAUD')
-pidFilePath = os.environ.get('PID_PATH') or '/var/run/datalogging.pid'
+pidFilePath = os.environ.get('PID_PATH') or '/opt/telemetry-data/datalogging.pid'
 tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
@@ -59,11 +59,11 @@ class Main():
         self.lcd = self.getLCD()
         self.getDataLoggingStatus()
     def getDataLoggingStatus(self):
-        dataLogging = self.findDataLoggingPidFile()
-        pidFilePresent = self.isPidFilePresent()
+	self.dataLoggingEnabled = self.isPidFilePresent()
+        return self.dataLoggingEnabled
     def isPidFilePresent(self):
         return os.path.isfile(pidFilePath)
-    def savePidFile():
+    def savePidFile(self):
         pid = str(os.getpid())
         file(pidFilePath,'w+').write("%s\n" % pid)
     def setDataLoggingStatus(self, dataLoggingStatus):
@@ -105,6 +105,8 @@ class Main():
 			while not self.runButtonPressed:
 				if(self.dataLoggingButton.read() == '1'):
 					self.runButtonPressed = True
+		else:
+			self.runButtonPressed = True
     def run(self):
         self.logMessage('Beginning run loop...')
 	self.setLCDStatus()
