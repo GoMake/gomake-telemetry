@@ -14,6 +14,7 @@ gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
 gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH')
 satBaud = os.environ.get('SAT_BAUD')
+pidFilePath = os.environ.get('PID_PATH') or '/var/run/datalogging.pid'
 tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
@@ -58,14 +59,17 @@ class Main():
         self.lcd = self.getLCD()
         self.getDataLoggingStatus()
     def getDataLoggingStatus(self):
-        datalogging = self.database.getConfigValueByKeyName('datalogging')
-        if(datalogging == 'True'):
-            self.dataLoggingEnabled == True
-        else:
-            self.dataLoggingEnabled == False
+        dataLogging = self.findDataLoggingPidFile()
+        pidFilePresent = self.isPidFilePresent()
+    def isPidFilePresent(self):
+        return os.path.isfile(pidFilePath)
+    def savePidFile():
+        pid = str(os.getpid())
+        file(pidFilePath,'w+').write("%s\n" % pid)
     def setDataLoggingStatus(self, dataLoggingStatus):
         self.dataLoggingEnabled = dataLoggingStatus
-        self.database.saveConfigItem({'type':'main','key':'datalogging','value': str(dataLoggingStatus)})
+        if dataLoggingStatus:
+            self.savePidFile()
     def getCurrentTime(self):
         return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     def logMessage(self, message):
@@ -96,8 +100,7 @@ class Main():
         if(self.lcd):
             self.lcd.setStatus(statusString)
             self.lcd.flashColor()
-    def waitForRun(self):
-		logging.info(str(self.dataLoggingEnabled))
+    def waitForButtonPressToRun(self):
 		if not self.dataLoggingEnabled:
 			while not self.runButtonPressed:
 				if(self.dataLoggingButton.read() == '1'):
@@ -127,6 +130,6 @@ class Main():
 
 if __name__ == '__main__':
     telemetry = Main()
-    telemetry.waitForRun()
+    telemetry.waitForButtonPressToRun()
     telemetry.run()
 

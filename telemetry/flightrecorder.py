@@ -32,8 +32,6 @@ class Database():
 				cursor = self.conn.cursor()
 				cursor.executescript("""
 					CREATE TABLE IF NOT EXISTS flightdata(id INTEGER PRIMARY KEY, timestamp TEXT, lat TEXT, long TEXT, alt TEXT, sensors TEXT);
-					CREATE TABLE IF NOT EXISTS config(id INTEGER PRIMARY KEY, type TEXT, key TEXT, value TEXT);
-					INSERT OR IGNORE INTO config (type, key, value) VALUES ('main','datalogging','False');
 				""")
 				self.conn.commit()
 			except sqlite.Error, e:
@@ -51,29 +49,6 @@ class Database():
 		except sqlite.Error, e:
 			self.conn.rollback()
 			logging.error('Could not insert record in database: ' + json.dumps(record))
-	def saveConfigItem(self, config):
-		try:
-			cursor = self.conn.cursor()
-			query = """
-			UPDATE config SET type='%s', value='%s' WHERE key='%s'
-			""" % (config['type'], config['value'], config['key'])
-			cursor.execute(query)
-			self.conn.commit()
-		except sqlite.Error, e:
-			self.conn.rollback()
-			logging.error('Could not insert config item in database: ' + json.dumps(config))
-	def getConfigValueByKeyName(self, keyName):
-		try:
-			cursor = self.conn.cursor()
-			cursor.execute("""
-				SELECT * FROM config WHERE key='%s'
-			""" % (keyName))
-			configItem = cursor.fetchone()
-			if configItem != None:
-				return configItem[3]
-		except sqlite.Error, e:
-			logging.error('Could not select config item for ' + keyName)
-		return 'Foo'
 
 if __name__ == "__main__":
 	d = Database('/opt/telemetry-data/data.db')
