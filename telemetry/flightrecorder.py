@@ -33,13 +33,13 @@ class Database():
 				cursor.executescript("""
 					CREATE TABLE IF NOT EXISTS flightdata(id INTEGER PRIMARY KEY, timestamp TEXT, lat TEXT, long TEXT, alt TEXT, sensors TEXT);
 					CREATE TABLE IF NOT EXISTS config(id INTEGER PRIMARY KEY, type TEXT, key TEXT, value TEXT);
-					INSERT INTO config (type, key, value) VALUES ('main','datalogging','False')
-					WHERE NOT EXISTS(SELECT * FROM config WHERE key='datalogging');
+					INSERT OR IGNORE INTO config (type, key, value) VALUES ('main','datalogging','False');
 				""")
 				self.conn.commit()
 			except sqlite.Error, e:
 				self.conn.rollback()
 				logging.error('Could not create table in database')
+				print e
 	def saveFlightRecord(self, record):
 		try:
 			cursor = self.conn.cursor()
@@ -73,11 +73,12 @@ class Database():
 				return configItem[3]
 		except sqlite.Error, e:
 			logging.error('Could not select config item for ' + keyName)
-		return False
+		return 'Foo'
 
 if __name__ == "__main__":
-	d = Database('data.db')
-	d.dropTables()
-	d.setupTables()
-	t = {'timestamp':'2016-07-23 12:25:00','lat':'45','long':'122','alt':'2000','sensors':'apples,oranges,tomatoes'}
-	d.saveFlightRecord(t)
+	d = Database('/opt/telemetry-data/data.db')
+	print d.getConfigValueByKeyName('datalogging')
+	#d.dropTables()
+	#d.setupTables()
+	#t = {'timestamp':'2016-07-23 12:25:00','lat':'45','long':'122','alt':'2000','sensors':'apples,oranges,tomatoes'}
+	#d.saveFlightRecord(t)
