@@ -10,18 +10,22 @@ goMake Telemetry System
 
 ### Installation
 
-Install gomake-telemetry with pip:
+Setup environment variables (see examples in __main__.py for guidance):
 
 ```
-$ pip install gomake-telemetry
+DB_PATH=/path/to/sqlite/file
+LOG_PATH=/path/to/writeable/logfile
+GPS_PATH=/dev/tty[NameOfSerialDevice]
+GPS_BAUD=4800
+SAT_PATH=/dev/tty[NameOfSerialDevice]
+SAT_BAUD=19200
+PID_PATH=/path/to/writeable/pid/file
 ```
 
-or directly from the source code:
+Install gomake-telemetry:
 
 ```
 $ git clone https://github.com/jonathanbarton/gomake-telemetry.git
-$ cd gomake-telemetry
-$ python setup.py install
 ```
 
 ## Basic Usage
@@ -29,9 +33,8 @@ $ python setup.py install
 After installation, the package can imported:
 
 ```
-$ python
->>> import telemetry
->>> telemetry.__version__
+$ cd gomake-telemetry
+$ python .
 ```
 
 ## Documentation
