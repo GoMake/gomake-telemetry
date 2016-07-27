@@ -1,6 +1,8 @@
 import sys, os, time, logging
 from telemetry import gps
 from telemetry import temperature
+from telemetry import barometer
+from telemetry import internaltemp
 from telemetry import sound
 from telemetry import gas
 from telemetry import button
@@ -18,7 +20,6 @@ pidFilePath = os.environ.get('PID_PATH') or '/opt/telemetry-data/datalogging.pid
 tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
-soundSensorPin = ''
 pushButtonPin = 3
 
 class Main():
@@ -39,11 +40,13 @@ class Main():
         self.logMessage("Loading: GrovePi Sensor Configuration...")
         sensors = []
         self.logMessage("Loading: LM35 Temperature Sensor...")
-        tempSensor = temperature.Temperature(tempSensorPin, self.logger)
+        tempSensor = temperature.Temperature(self.logger)
         sensors.append(tempSensor)
-        #self.logMessage("Loading: Sound Sensor...")
-        #soundSensor = sound.Sound(soundSensorPin, self.logger)
-        #sensors.append(soundSensor)
+        barometricSensor = barometer.Barometer(self.logger)
+        sensors.append(barometricSensor)
+        self.logMessage("Loading: Sound Sensor...")
+        soundSensor = sound.Sound(soundSensorPin, self.logger)
+        sensors.append(soundSensor)
         #self.logMessage("Loading: Gas Sensor...")
         #gasSensor = gas.Gas(gasSensorPin, self.logger)
         #sensors.append(gasSensor)

@@ -3,10 +3,10 @@ import RPi.GPIO as GPIO
 from grove_i2c_barometic_sensor_BMP180 import BMP085
 from sensor import Sensor
 
-class Temperature(Sensor):
-	name="Temperature"
+class Barometer(Sensor):
+        name="Barometer"
 	def __init__(self, logger=None):
-		Sensor.__init__(self, self.name, logger)
+                Sensor.__init__(self, self.name, logger)
 		self.bmp = BMP085(0x77, 1)
 		self.initSMBus()
 	def initSMBus(self):
@@ -16,9 +16,16 @@ class Temperature(Sensor):
 		else:
 			bus = smbus.SMBus(0)
 	def read(self):
+		pressure = self.bmp.readPressure()
+		return "%.2f" % (pressure / 100.0)
+	def readTemperature(self):
 		temperature = self.bmp.readTemperature()
 		return "%.2f" % (temperature)
+	def readAltitude(self):
+		pressure = self.bmp.readPressure()
+		altitude = self.bmp.readAltitude(pressure)
+		return "%.2f" % (altitude)		
 
 if __name__ == '__main__':
-        b = Temperature()
+        b = Barometer()
         print b.read()
