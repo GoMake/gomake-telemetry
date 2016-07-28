@@ -8,6 +8,7 @@ from telemetry import gas
 from telemetry import button
 from telemetry import flightrecorder
 from telemetry import flightrecord
+from telemetry import satmodem
 from telemetry import lcd
 
 dbPath = os.environ.get('DB_PATH') or '/opt/telemetry-data/data.db'
@@ -33,6 +34,7 @@ class Main():
         return flightrecorder.Database(dbPath)
     def getSatModem(self):
         self.logMessage("Loading: Satellite Modem...")
+        return satmodem.SatModem(satPath, self.logger)
     def getGPS(self):
         self.logMessage("Loading: GPS Module...")
         return gps.GPS(gpsPath, gpsBaud, self.logger)
@@ -112,7 +114,7 @@ class Main():
 			self.runButtonPressed = True
     def run(self):
         self.logMessage('Beginning run loop...')
-	self.setLCDStatus()
+        self.setLCDStatus()
         while True:
             try:
                 timestamp = self.getCurrentTime()
