@@ -6,6 +6,7 @@ class SatModem (rockBlockProtocol):
 	devPath="/dev/tty.usbserial-FT0DJGSK"
 	def __init__(self, satPath, logger=None):
 		self.devPath = satPath
+		self.modem = None
 		self.connect()
 	def connect(self):
 		logging.info("Attempting to connect to satellite")

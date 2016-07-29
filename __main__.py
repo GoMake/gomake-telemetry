@@ -22,7 +22,7 @@ tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
 pushButtonPin = 3
-transmitDelaySeconds = 150
+transmitDelaySeconds = 120
 
 class Main():
     dataLoggingEnabled = False
@@ -50,9 +50,9 @@ class Main():
         self.logMessage("Loading: Sound Sensor...")
         soundSensor = sound.Sound(soundSensorPin, self.logger)
         sensors.append(soundSensor)
-        #self.logMessage("Loading: Gas Sensor...")
-        #gasSensor = gas.Gas(gasSensorPin, self.logger)
-        #sensors.append(gasSensor)
+        self.logMessage("Loading: Gas Sensor...")
+        gasSensor = gas.Gas(gasSensorPin, self.logger)
+        sensors.append(gasSensor)
         return sensors
     def getButton(self):
         return button.Button(pushButtonPin, self.logger)
@@ -99,13 +99,13 @@ class Main():
             sensorValues[sensorType] = sensorValue
             time.sleep(0.5)
         return sensorValues
-	def setLCDStatus(self):
-		runStatus = 'Y' if self.runButtonPressed else 'N'
-		recStatus = 'Y' if self.dataLoggingEnabled else 'N'
-		statusString = 'RUN: ' + runStatus + ' REC: ' + recStatus
+    def setLCDStatus(self):
+        runStatus = 'Y' if self.runButtonPressed else 'N'
+        recStatus = 'Y' if self.dataLoggingEnabled else 'N'
+        statusString = 'RUN: ' + runStatus + ' REC: ' + recStatus
         if(self.lcd):
-			self.lcd.setStatus(statusString)
-			self.lcd.flashColor()
+            self.lcd.setStatus(statusString)
+            self.lcd.flashColor()
     def waitForButtonPressToRun(self):
         if not self.dataLoggingEnabled:
             while not self.runButtonPressed:
@@ -131,11 +131,9 @@ class Main():
                     #Record in Database
                     self.database.saveFlightRecord(record.getDatabaseFormat())
                     #Send Satellite Message
-                    self.logMessage('Transmitting into near-space...')
                     currentTime = int(time.time())
                     if(currentTime - previousTime >= transmitDelaySeconds):
-						print "HERE"
-						#self.satModem.sendMessage(record.getSatModemFormat())
+						self.satModem.sendMessage(record.getSatModemFormat())
 						previousTime = currentTime
             except Exception as e:
                 logging.exception(e)
