@@ -30,6 +30,8 @@ class FlightRecord():
 		satModemData.append("latitude=" + str(self.coordinates.latitude))
 		satModemData.append("longitude=" + str(self.coordinates.longitude))
 		satModemData.append("altitude=" + str(self.coordinates.altitude))
+		satmodemData.append("satellites=" + str(self.coordinates.satellites))
+		satModemData.append("fix_quality=" + str(self.coordinates.fix_quality))
 		for key, val in self.sensorValues.iteritems():
 			satModemData.append(key + "=" + val)
 		return '&'.join(satModemData)
