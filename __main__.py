@@ -15,13 +15,14 @@ dbPath = os.environ.get('DB_PATH') or '/opt/telemetry-data/data.db'
 logPath = os.environ.get('LOG_PATH') or '/opt/telemetry-data/event.log'
 gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
 gpsBaud = os.environ.get('GPS_BAUD') or 4800
-satPath = os.environ.get('SAT_PATH')
-satBaud = os.environ.get('SAT_BAUD')
+satPath = os.environ.get('SAT_PATH') or '/dev/ttyUSB0'
+satBaud = os.environ.get('SAT_BAUD') or 19200
 pidFilePath = os.environ.get('PID_PATH') or '/opt/telemetry-data/datalogging.pid'
 tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
 pushButtonPin = 3
+transmitDelaySeconds = 150
 
 class Main():
     dataLoggingEnabled = False
@@ -98,23 +99,24 @@ class Main():
             sensorValues[sensorType] = sensorValue
             time.sleep(0.5)
         return sensorValues
-    def setLCDStatus(self):
-	runStatus = 'Y' if self.runButtonPressed else 'N'
-        recStatus = 'Y' if self.dataLoggingEnabled else 'N'
-        statusString = 'RUN: ' + runStatus + ' REC: ' + recStatus
+	def setLCDStatus(self):
+		runStatus = 'Y' if self.runButtonPressed else 'N'
+		recStatus = 'Y' if self.dataLoggingEnabled else 'N'
+		statusString = 'RUN: ' + runStatus + ' REC: ' + recStatus
         if(self.lcd):
-            self.lcd.setStatus(statusString)
-            self.lcd.flashColor()
+			self.lcd.setStatus(statusString)
+			self.lcd.flashColor()
     def waitForButtonPressToRun(self):
-		if not self.dataLoggingEnabled:
-			while not self.runButtonPressed:
-				if(self.dataLoggingButton.read() == '1'):
-					self.runButtonPressed = True
-		else:
-			self.runButtonPressed = True
+        if not self.dataLoggingEnabled:
+            while not self.runButtonPressed:
+                if(self.dataLoggingButton.read() == '1'):
+                    self.runButtonPressed = True
+        else:
+            self.runButtonPressed = True
     def run(self):
         self.logMessage('Beginning run loop...')
         self.setLCDStatus()
+        previousTime = int(time.time())
         while True:
             try:
                 timestamp = self.getCurrentTime()
@@ -129,6 +131,12 @@ class Main():
                     #Record in Database
                     self.database.saveFlightRecord(record.getDatabaseFormat())
                     #Send Satellite Message
+                    self.logMessage('Transmitting into near-space...')
+                    currentTime = int(time.time())
+                    if(currentTime - previousTime >= transmitDelaySeconds):
+						print "HERE"
+						#self.satModem.sendMessage(record.getSatModemFormat())
+						previousTime = currentTime
             except Exception as e:
                 logging.exception(e)
     def __init__(self):
