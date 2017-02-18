@@ -64,7 +64,7 @@ class Sentence():
 		self.satellites = '0'
 		self.dilution = '0'
 		self.altitude = '0'
-	def dms2dec(dmsString):
+	def dms2dec(self, dmsString, dmsDirection):
 		dmsString = re.sub(r'\s','',dmsString)
 		(dmsDegreesMins, dmsSeconds) = re.split('\.',dmsString, maxsplit=1)
 		if(len(dmsDegreesMins) >= 5):
@@ -76,7 +76,7 @@ class Sentence():
 		seconds = int(dmsSeconds[:2])
 		fracSeconds = int(dmsSeconds[2:])
 		sign = 1
-		if re.match('[swSW]', dmsString):
+		if re.match('[swSW]', dmsDirection):
 			sign = -1
 		return str(sign * (int(degrees) + float(minutes) / 60 + float(seconds) / 3600 + float(fracSeconds) / 36000))
 		

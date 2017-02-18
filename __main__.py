@@ -45,6 +45,7 @@ class Main():
         self.logMessage("Loading: LM35 Temperature Sensor...")
         tempSensor = temperature.Temperature(self.logger)
         sensors.append(tempSensor)
+        self.logMessage("Loading: BMP180 Temp/Pressure Sensor...")
         barometricSensor = barometer.Barometer(self.logger)
         sensors.append(barometricSensor)
         self.logMessage("Loading: Sound Sensor...")
