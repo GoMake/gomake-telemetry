@@ -61,10 +61,9 @@ class GPS(Sensor):
     def handleReadError(self, signum, frame):
         pass
     def getSentence(self, line):
-        fixDataArray = line.split(',')
-        return Sentence(fixDataArray)
+        return Sentence(line)
 if __name__ == "__main__":
-    gps=GPS('/dev/ttyS0', 4800)
+    gps=GPS('/dev/ttyAMA0', 4800)
     coords = gps.read()
     print coords
     print coords.latitude
