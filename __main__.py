@@ -13,7 +13,7 @@ from telemetry import lcd
 
 dbPath = os.environ.get('DB_PATH') or '/opt/telemetry-data/data.db'
 logPath = os.environ.get('LOG_PATH') or '/opt/telemetry-data/event.log'
-gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyS0'
+gpsPath = os.environ.get('GPS_PATH') or '/dev/ttyAMA0'
 gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH') or '/dev/ttyUSB0'
 satBaud = os.environ.get('SAT_BAUD') or 19200
@@ -146,4 +146,3 @@ if __name__ == '__main__':
     telemetry = Main()
     telemetry.waitForButtonPressToRun()
     telemetry.run()
-
