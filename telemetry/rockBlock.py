@@ -48,24 +48,24 @@ class rockBlock(object):
     IRIDIUM_EPOCH = 1399818235000   #May 11, 2014, at 14:23:55 (This will be 're-epoched' every couple of years!)
         
     def __init__(self, portId, callback):
-        
+     
         self.s = None
         self.portId = portId
         self.callback = callback
         self.autoSession = True     #When True, we'll automatically initiate additional sessions if more messages to download
         
         try:
-            
+            print 'before serial'
             self.s = serial.Serial(self.portId, 19200, timeout=5)
-            
+            print 'after serial'
             if( self._configurePort() ):
                                 
                 self.ping() #KEEP SACRIFICIAL!
                                             
                 self.s.timeout = 60
-                    
+                print 'before ping'
                 if( self.ping() ):
-                    
+                    print 'past ping'   
                     if(self.callback != None and callable(self.callback.rockBlockConnected) ):   
                         self.callback.rockBlockConnected()
                         
@@ -75,8 +75,7 @@ class rockBlock(object):
             self.close()
             raise rockBlockException()
                     
-        except (Exception):
-            
+        except Exception:
             raise rockBlockException
         
     
