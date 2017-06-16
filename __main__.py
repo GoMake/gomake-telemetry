@@ -10,6 +10,7 @@ from telemetry import flightrecorder
 from telemetry import flightrecord
 from telemetry import satmodem
 from telemetry import lcd
+import subprocess
 
 dbPath = os.environ.get('DB_PATH') or '/opt/telemetry-data/data.db'
 logPath = os.environ.get('LOG_PATH') or '/opt/telemetry-data/event.log'
@@ -18,11 +19,12 @@ gpsBaud = os.environ.get('GPS_BAUD') or 4800
 satPath = os.environ.get('SAT_PATH') or '/dev/ttyUSB0'
 satBaud = os.environ.get('SAT_BAUD') or 19200
 pidFilePath = os.environ.get('PID_PATH') or '/opt/telemetry-data/datalogging.pid'
+satModemPath = '/opt/gomake-telemetry/telemetry/satmodem.py'
 tempSensorPin = 0
 soundSensorPin = 1
 gasSensorPin = 2
 pushButtonPin = 3
-transmitDelaySeconds = 120
+transmitDelaySeconds = 70
 
 class Main():
     dataLoggingEnabled = False
@@ -124,18 +126,27 @@ class Main():
                 coordinates = self.gps.read()
                 #Read Sensor values
                 sensorValues = self.readSensorValues()
-                record = flightrecord.FlightRecord(timestamp, coordinates, sensorValues)
-                #Log in log
-                self.logMessage(record.getLogFormat())
-                if(self.isDataLoggingEnabled()):
+		record = flightrecord.FlightRecord(timestamp, coordinates, sensorValues)
+		self.logMessage('SatModem Format:')
+		self.logMessage(record.getSatModemFormat())
+		#Log in log
+		self.logMessage('LogFormat:')
+		self.logMessage(record.getLogFormat())
+               	if(self.isDataLoggingEnabled()):
                     self.logMessage('Writing to database...')
                     #Record in Database
                     self.database.saveFlightRecord(record.getDatabaseFormat())
                     #Send Satellite Message
                     currentTime = int(time.time())
+                    self.logMessage('Current Time: ' + str(currentTime))
+                    self.logMessage('Previous Time: ' + str(previousTime))
+                    self.logMessage('Delta: ' + str(currentTime - previousTime))
                     if(currentTime - previousTime >= transmitDelaySeconds):
-						self.satModem.sendMessage(record.getSatModemFormat())
-						previousTime = currentTime
+						# self.satModem.sendMessage(record.getSatModemFormat())
+						satModemMessage = record.getSatModemFormat()
+                        processPath = "python {} '{}'".format(satModemPath, satModemMessage)
+						subprocess.call(processPath, shell=True)
+						previousTime = int(time.time())
             except Exception as e:
                 logging.exception(e)
     def __init__(self):

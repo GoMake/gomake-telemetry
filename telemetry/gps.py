@@ -32,6 +32,7 @@ class GPS(Sensor):
         if(currentTime - self.lastTryTime >= self.secondsToWaitForReconnect):
             self.connect()
     def read(self):
+	#self.conn.flushOutput()
         if(not self.conn):
             self.tryReconnect()
         while self.conn:
@@ -42,15 +43,21 @@ class GPS(Sensor):
             if line[:6] == '$GPGGA':
                 sentence = self.getSentence(line)
                 if(sentence and sentence.isValid()):
+                    #self.logMessage('closing connection') 
+                    #self.conn.close()
                     return sentence
             self.numberOfReadTries += 1
             time.sleep(0.1)
         return Sentence([])
     def readLine(self):
+        self.logMessage('start of readline')
         try:
             signal.signal(signal.SIGALRM, self.handleReadError)
             signal.alarm(self.secondsToWaitForRead)
+            self.logMessage('readLine(): BEFORE READLINE: {}'.format(self.conn.inWaiting()))
             line = self.conn.readline()
+            self.conn.flushInput()
+            self.logMessage('readLine(): AFTER READLINE: {}'.format(self.conn.inWaiting()))
             signal.alarm(0)
             self.numberOfReadTries = 0
             return line
@@ -66,4 +73,4 @@ if __name__ == "__main__":
     gps=GPS('/dev/ttyAMA0', 4800)
     coords = gps.read()
     print coords
-    print coords.latitude
+    print str(coords.latitude) + ', ' + str(coords.longitude)
