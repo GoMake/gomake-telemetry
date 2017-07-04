@@ -2,6 +2,7 @@ import sys, time, logging
 import rockBlock
 from rockBlock import rockBlockProtocol
 import gps, flightrecord
+from grove_rgb_lcd import *
 
 def print_out_waiting(conn, msg): 
 	buffer_size = str(conn.outWaiting())
@@ -24,6 +25,7 @@ class SatModem (rockBlockProtocol):
 			dir(self.modem)
 		except Exception as e:
 			logging.info('Satellite failed to initialize: {}'.format(e))
+			setText('INIT FAILED')
 	def sendMessage(self, message):
 		if(self.modem):
 			print_out_waiting(self.modem.s,'sendMessage():BEFORE SENDMESSAGE:')
@@ -32,15 +34,18 @@ class SatModem (rockBlockProtocol):
 			self.connect()
 			print_out_waiting(self.modem.s,'sendMessage()->connect():AFTER CONNECT:')
 	def rockBlockTxStarted(self):
-		logging.info("Establishing satellite connection...")   
+		logging.info("Establishing satellite connection...") 
+		setText('TX CONNECTING')  
 	def rockBlockTxFailed(self):
 		print_out_waiting(self.modem.s,'rockBlockTxFailed():BEFORE FLUSH:')
 		logging.info("Satellite transmission failed...")
+		setText('TX FAILED')  
 		self.modem.s.flushOutput()
 		print_out_waiting(self.modem.s,'rockBlockTxFailed():AFTER FLUSH:')
 	def rockBlockTxSuccess(self,messageNumber):
 		logging.info("Satellite transmission succeeded for message " + str(messageNumber))
 		print_out_waiting(self.modem.s, 'rockBlockTxSuccess():AFTER TX SUCCEED EVENT:')
+		setText('TX SUCCEEDED') 
 		
 if __name__ == '__main__':
 	messageString = sys.argv[1]
