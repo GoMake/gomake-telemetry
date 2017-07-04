@@ -1,2 +1,7 @@
-testpackage == 2.26
-tsip==0.2.0
+pandas==0.20.1
+plotly==2.0.12
+numpy==1.12.1
+ipython==5.4.1
+grovepi==1.2.2
+pynmea2==1.8.0
+pyserial==3.3
