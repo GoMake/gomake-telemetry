@@ -42,6 +42,7 @@ Icon*
 /build
 /dist
 
+
 # Sublime Text
 *.sublime-workspace
 
@@ -53,3 +54,6 @@ Icon*
 
 #gomake-telemetry
 event.log
+
+#DS-Store
+.DS_Store
