@@ -3,13 +3,19 @@
 # Note Update DeviceId and Trasnmit Times to the ones you want
 
 ```
-var cursor = db.getCollection('telemetry').find({'deviceId' : '300234064222900' ,'transmitTime' : { $gte : new ISODate('2017-06-20T20:00:04.000Z'),$lte: new ISODate('2017-06-20T23:05:46.000Z')}})
+var cursor = db.getCollection('telemetry').find({'deviceId' : '300234064222900' ,'transmitTime' : 
+{ $gte : new ISODate('2017-07-18T20:00:04.000Z'),
+   $lte: new ISODate('2017-07-20T23:05:46.000Z')}})
 
 var telemetry = cursor.toArray();
+print (telemetry);
 
 for(i=0;i < telemetry.length;i++) {
     if(i==0)
         print('Latitude',",",'Longitude',",",'Altitude',",",'Temperature',",",'Barometer',",",'Sound',",",'Transmit Time',",",'DeviceId')
+   
+   if(telemetry[i].sensors)
+   {
     print (telemetry[i].location.coordinates[1],",",
            telemetry[i].location.coordinates[0],",",
            telemetry[i].altitude,",",
@@ -18,7 +24,9 @@ for(i=0;i < telemetry.length;i++) {
            telemetry[i].sensors.sound,",",
            telemetry[i].transmitTime,",",
            telemetry[i].deviceId)
+   }
 }
+
 ```
 
 # STEP 2 - Copy paste the results in logs.txt file in this directory ###
